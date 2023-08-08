@@ -6,6 +6,10 @@
   <body>
     <div class="container mx-auto">
       <h1>hello world</h1>
+      <button hx-get="todos" hx-trigger="click" hx-target="#todo-results">
+        Get todos
+      </button>
+      <div id="todo-results"></div>
     </div>
   </body>
 </html>
