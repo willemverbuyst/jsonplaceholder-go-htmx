@@ -13,18 +13,20 @@ import (
 
 const jsonplaceholderApi = "https://jsonplaceholder.typicode.com/"
 
-type Response []struct {
+type TodoResponse []struct {
 	Id        int    `json:"id"`
 	Title     string `json:"title"`
 	Completed bool   `json:"completed"`
 }
 
-func PrettyPrint(i interface{}) string {
-	s, _ := json.MarshalIndent(i, "", "\t")
-	return string(s)
+type UserResponse []struct {
+	Id       int    `json:"id"`
+	Name     string `json:"name"`
+	UserName string `json:"username"`
+	Email    string `json:"email"`
 }
 
-func GetTodos() Response {
+func GetTodos() TodoResponse {
 	resp, err := http.Get(jsonplaceholderApi + "todos")
 
 	if err != nil {
@@ -38,12 +40,32 @@ func GetTodos() Response {
 		log.Fatalln(err)
 	}
 
-	var result Response
+	var result TodoResponse
 	if err := json.Unmarshal(body, &result); err != nil {
 		fmt.Println("Can not unmarshal JSON")
 	}
 
-	fmt.Println(PrettyPrint(result))
+	return result
+}
+
+func GetUsers() UserResponse {
+	resp, err := http.Get(jsonplaceholderApi + "users")
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	var result UserResponse
+	if err := json.Unmarshal(body, &result); err != nil {
+		fmt.Println("Can not unmarshal JSON")
+	}
 
 	return result
 }
@@ -60,6 +82,14 @@ func main() {
 		values := GetTodos()
 
 		return c.Render("todos", fiber.Map{
+			"Results": values,
+		})
+	})
+
+	app.Get("/users", func(c *fiber.Ctx) error {
+		values := GetUsers()
+
+		return c.Render("users", fiber.Map{
 			"Results": values,
 		})
 	})

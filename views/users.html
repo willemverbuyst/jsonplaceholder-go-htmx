@@ -1,0 +1,30 @@
+<div class="pt-4">
+  <h2 class="text-2xl">Users</h2>
+  <div class="relative overflow-x-auto sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead
+        class="text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+      >
+        <tr>
+          <th scope="col" class="px-6 py-4">#</th>
+          <th scope="col" class="px-6 py-4">Name</th>
+          <th scope="col" class="px-6 py-4">Username</th>
+          <th scope="col" class="px-6 py-4">Email</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{range .Results}}
+        <tr
+          class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+        >
+          <td class="px-6 py-4">{{.Id}}</td>
+          <td class="px-6 py-4">{{.Name}}</td>
+          <td class="px-6 py-4">{{.UserName}}</td>
+          <td class="px-6 py-4">{{.Email}}</td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+</div>

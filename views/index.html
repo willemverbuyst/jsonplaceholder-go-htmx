@@ -6,19 +6,27 @@
   <body class="bg-amber-950 text-amber-50">
     <div class="container mx-auto p-4">
       <header>
-        <h1 class="text-2xl">hello world</h1>
+        <h1 class="text-2xl">Todo app with htmx & go</h1>
       </header>
-      <div>
+      <div class="pt-4">
         <button
           hx-get="todos"
           hx-trigger="click"
-          hx-target="#todo-results"
+          hx-target="#results"
           class="border border-amber-300 text-amber-300 px-2 py-1 rounded hover:bg-amber-700 focus-within:bg-amber-700 outline-none mx-2"
         >
           Get todos
         </button>
+        <button
+          hx-get="users"
+          hx-trigger="click"
+          hx-target="#results"
+          class="border border-amber-300 text-amber-300 px-2 py-1 rounded hover:bg-amber-700 focus-within:bg-amber-700 outline-none mx-2"
+        >
+          Get users
+        </button>
       </div>
-      <div id="todo-results"></div>
+      <div id="results"></div>
     </div>
   </body>
 </html>
