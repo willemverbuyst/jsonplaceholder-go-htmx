@@ -14,7 +14,9 @@ import (
 const jsonplaceholderApi = "https://jsonplaceholder.typicode.com/"
 
 type Response []struct {
-	Title string `json:"title"`
+	Id        int    `json:"id"`
+	Title     string `json:"title"`
+	Completed bool   `json:"completed"`
 }
 
 func PrettyPrint(i interface{}) string {
