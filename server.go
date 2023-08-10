@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
@@ -19,12 +20,14 @@ type TodoResponse []struct {
 	Completed bool   `json:"completed"`
 }
 
-type UserResponse []struct {
+type User struct {
 	Id       int    `json:"id"`
 	Name     string `json:"name"`
 	UserName string `json:"username"`
 	Email    string `json:"email"`
 }
+
+type UserResponse []User
 
 func GetTodos() TodoResponse {
 	resp, err := http.Get(jsonplaceholderApi + "todos")
@@ -70,6 +73,15 @@ func GetUsers() UserResponse {
 	return result
 }
 
+func GetUserByID(id int, users UserResponse) *User {
+	for _, user := range users {
+		if user.Id == id {
+			return &user
+		}
+	}
+	return nil
+}
+
 func main() {
 	engine := html.New("./views", ".html")
 	app := fiber.New(fiber.Config{Views: engine})
@@ -91,6 +103,25 @@ func main() {
 
 		return c.Render("users", fiber.Map{
 			"Results": values,
+		})
+	})
+
+	app.Get("/users/:id", func(c *fiber.Ctx) error {
+		users := GetUsers()
+
+		userIDParam := c.Params("id")
+		userID, err := strconv.Atoi(userIDParam)
+		if err != nil {
+			return c.Status(http.StatusBadRequest).SendString("Invalid ID")
+		}
+
+		user := GetUserByID(userID, users)
+		if user == nil {
+			return c.Status(http.StatusNotFound).SendString("User not found")
+		}
+
+		return c.Render("user", fiber.Map{
+			"User": user,
 		})
 	})
 

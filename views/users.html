@@ -14,7 +14,14 @@
       <tbody>
         {{range .Results}}
         <tr class="border-b bg-amber-800 border-amber-700 hover:bg-amber-600">
-          <td class="px-6 py-4">{{.Id}}</td>
+          <td
+            class="px-6 py-4"
+            hx-get="users/{{.Id}}"
+            hx-trigger="click"
+            hx-target="#results"
+          >
+            {{.Id}}
+          </td>
           <td class="px-6 py-4">{{.Name}}</td>
           <td class="px-6 py-4">{{.UserName}}</td>
           <td class="px-6 py-4">{{.Email}}</td>
