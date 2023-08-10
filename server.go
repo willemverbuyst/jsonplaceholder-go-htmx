@@ -54,6 +54,7 @@ type User struct {
 type Users []User
 
 func GetTodos() Todos {
+	fmt.Println("Get todos")
 	resp, err := http.Get(jsonplaceholderApi + "todos")
 
 	if err != nil {
@@ -76,6 +77,7 @@ func GetTodos() Todos {
 }
 
 func GetUsers() Users {
+	fmt.Println("Get users")
 	resp, err := http.Get(jsonplaceholderApi + "users")
 
 	if err != nil {
@@ -97,13 +99,27 @@ func GetUsers() Users {
 	return result
 }
 
-func GetUserByID(id int, users Users) *User {
-	for _, user := range users {
-		if user.Id == id {
-			return &user
-		}
+func GetUserByID(id int) User {
+	fmt.Println("Get user by Id")
+	resp, err := http.Get(jsonplaceholderApi + "users/" + strconv.Itoa(id))
+
+	if err != nil {
+		log.Fatalln(err)
 	}
-	return nil
+
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	var result User
+	if err := json.Unmarshal(body, &result); err != nil {
+		fmt.Println("Can not unmarshal JSON")
+	}
+
+	return result
 }
 
 func main() {
@@ -131,7 +147,6 @@ func main() {
 	})
 
 	app.Get("/users/:id", func(c *fiber.Ctx) error {
-		users := GetUsers()
 
 		userIDParam := c.Params("id")
 		userID, err := strconv.Atoi(userIDParam)
@@ -139,10 +154,7 @@ func main() {
 			return c.Status(http.StatusBadRequest).SendString("Invalid ID")
 		}
 
-		user := GetUserByID(userID, users)
-		if user == nil {
-			return c.Status(http.StatusNotFound).SendString("User not found")
-		}
+		user := GetUserByID(userID)
 
 		return c.Render("user", fiber.Map{
 			"User": user,
