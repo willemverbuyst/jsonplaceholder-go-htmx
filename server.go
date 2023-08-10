@@ -14,18 +14,14 @@ import (
 
 const jsonplaceholderApi = "https://jsonplaceholder.typicode.com/"
 
-type Todo []struct {
+type Todo struct {
+	UserId    int    `json:"userId"`
 	Id        int    `json:"id"`
 	Title     string `json:"title"`
 	Completed bool   `json:"completed"`
-	UserId    int    `json:"userId"`
 }
 
-type Todos []struct {
-	Id        int    `json:"id"`
-	Title     string `json:"title"`
-	Completed bool   `json:"completed"`
-}
+type Todos []Todo
 
 type Address struct {
 	Street  string `json:"street"`

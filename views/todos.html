@@ -7,6 +7,7 @@
           <th scope="col" class="px-6 py-4">#</th>
           <th scope="col" class="px-6 py-4">Title</th>
           <th scope="col" class="px-6 py-4">Completed</th>
+          <th scope="col" class="px-6 py-4">User</th>
         </tr>
       </thead>
 
@@ -16,6 +17,14 @@
           <td class="px-6 py-4">{{.Id}}</td>
           <td class="px-6 py-4">{{.Title}}</td>
           <td class="px-6 py-4">{{.Completed}}</td>
+          <td
+            class="px-6 py-4"
+            hx-get="users/{{.UserId}}"
+            hx-trigger="click"
+            hx-target="#results"
+          >
+            {{.UserId}}
+          </td>
         </tr>
         {{end}}
       </tbody>
