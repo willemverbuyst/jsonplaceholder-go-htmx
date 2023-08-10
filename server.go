@@ -14,22 +14,50 @@ import (
 
 const jsonplaceholderApi = "https://jsonplaceholder.typicode.com/"
 
-type TodoResponse []struct {
+type Todo []struct {
+	Id        int    `json:"id"`
+	Title     string `json:"title"`
+	Completed bool   `json:"completed"`
+	UserId    int    `json:"userId"`
+}
+
+type Todos []struct {
 	Id        int    `json:"id"`
 	Title     string `json:"title"`
 	Completed bool   `json:"completed"`
 }
 
-type User struct {
-	Id       int    `json:"id"`
-	Name     string `json:"name"`
-	UserName string `json:"username"`
-	Email    string `json:"email"`
+type Address struct {
+	Street  string `json:"street"`
+	Suite   string `json:"suite"`
+	City    string `json:"city"`
+	ZipCode string `json:"zipcode"`
+	Geo     struct {
+		Lat string `json:"lat"`
+		Lng string `json:"lng"`
+	}
 }
 
-type UserResponse []User
+type Company struct {
+	Name        string `json:"name"`
+	CatchPhrase string `json:"catchPhrase"`
+	BS          string `json:"bs"`
+}
 
-func GetTodos() TodoResponse {
+type User struct {
+	Id       int     `json:"id"`
+	Name     string  `json:"name"`
+	UserName string  `json:"username"`
+	Email    string  `json:"email"`
+	Phone    string  `json:"phone"`
+	Website  string  `json:"website"`
+	Address  Address `json:"address"`
+	Company  Company `json:"company"`
+}
+
+type Users []User
+
+func GetTodos() Todos {
 	resp, err := http.Get(jsonplaceholderApi + "todos")
 
 	if err != nil {
@@ -43,7 +71,7 @@ func GetTodos() TodoResponse {
 		log.Fatalln(err)
 	}
 
-	var result TodoResponse
+	var result Todos
 	if err := json.Unmarshal(body, &result); err != nil {
 		fmt.Println("Can not unmarshal JSON")
 	}
@@ -51,7 +79,7 @@ func GetTodos() TodoResponse {
 	return result
 }
 
-func GetUsers() UserResponse {
+func GetUsers() Users {
 	resp, err := http.Get(jsonplaceholderApi + "users")
 
 	if err != nil {
@@ -65,7 +93,7 @@ func GetUsers() UserResponse {
 		log.Fatalln(err)
 	}
 
-	var result UserResponse
+	var result Users
 	if err := json.Unmarshal(body, &result); err != nil {
 		fmt.Println("Can not unmarshal JSON")
 	}
@@ -73,7 +101,7 @@ func GetUsers() UserResponse {
 	return result
 }
 
-func GetUserByID(id int, users UserResponse) *User {
+func GetUserByID(id int, users Users) *User {
 	for _, user := range users {
 		if user.Id == id {
 			return &user
