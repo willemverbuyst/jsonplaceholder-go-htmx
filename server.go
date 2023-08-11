@@ -54,7 +54,6 @@ type User struct {
 type Users []User
 
 func GetTodos() Todos {
-	fmt.Println("Get todos")
 	resp, err := http.Get(jsonplaceholderApi + "todos")
 
 	if err != nil {
@@ -77,7 +76,6 @@ func GetTodos() Todos {
 }
 
 func GetUsers() Users {
-	fmt.Println("Get users")
 	resp, err := http.Get(jsonplaceholderApi + "users")
 
 	if err != nil {
@@ -100,7 +98,6 @@ func GetUsers() Users {
 }
 
 func GetUserByID(id int) User {
-	fmt.Println("Get user by Id")
 	resp, err := http.Get(jsonplaceholderApi + "users/" + strconv.Itoa(id))
 
 	if err != nil {
@@ -147,7 +144,6 @@ func main() {
 	})
 
 	app.Get("/users/:id", func(c *fiber.Ctx) error {
-
 		userIDParam := c.Params("id")
 		userID, err := strconv.Atoi(userIDParam)
 		if err != nil {
